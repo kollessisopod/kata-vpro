@@ -19,16 +19,17 @@ spec:
       affinity:
           podAntiAffinity:
             preferredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - vproapp
-                  - vprodb
-                  - vpromc
-                  - vprormq
-              topologyKey: "kubernetes.io/hostname"
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - vprodb
+                    - vpromc
+                    - vprormq
+                topologyKey: "kubernetes.io/hostname"
       containers:
       - name: vproapp
         image: vprocontainers/vprofileapp
@@ -47,3 +48,4 @@ spec:
         image: busybox
 
         command: ['sh', '-c', "until nslookup vpromq01.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for vpromq; sleep 2; done"]
+
