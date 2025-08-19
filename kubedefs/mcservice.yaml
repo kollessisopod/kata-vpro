@@ -4,7 +4,7 @@ metadata:
   name: vprocache01
 spec: 
   selector:
-    app: vprocache
+    app: vpromc
   ports:
   - name: http
     port: 11211
