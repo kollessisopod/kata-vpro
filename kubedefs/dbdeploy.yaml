@@ -14,6 +14,19 @@ spec:
       labels:
         app: vprodb
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - vproapp
+                - vprodb
+                - vpromc
+                - vprormq
+            topologyKey: "kubernetes.io/hostname"
       containers:
       - name: vprodb
         image: vprocontainers/vprofiledb
@@ -39,4 +52,5 @@ spec:
           args: ["rm", "-rf", "/var/lib/mysql/lost+found"]
           volumeMounts:
             - name: vpro-db-data
+
               mountPath: /var/lib/mysql
