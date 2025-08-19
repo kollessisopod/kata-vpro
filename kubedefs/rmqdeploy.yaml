@@ -15,18 +15,19 @@ spec:
         app: vprormq
     spec:
       affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - vproapp
-                - vprodb
-                - vpromc
-                - vprormq
-            topologyKey: "kubernetes.io/hostname"
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - vprodb
+                    - vpromc
+                    - vprormq
+                topologyKey: "kubernetes.io/hostname"
       containers:
       - name: vprormq
         image: rabbitmq:latest
@@ -41,4 +42,5 @@ spec:
               key: rmq-pass
         - name: RABBITMQ_DEFAULT_USER
           value: "guest"
+
 
