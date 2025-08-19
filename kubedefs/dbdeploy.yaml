@@ -15,18 +15,19 @@ spec:
         app: vprodb
     spec:
       affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - vproapp
-                - vprodb
-                - vpromc
-                - vprormq
-            topologyKey: "kubernetes.io/hostname"
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - vprodb
+                    - vpromc
+                    - vprormq
+                topologyKey: "kubernetes.io/hostname"
       containers:
       - name: vprodb
         image: vprocontainers/vprofiledb
@@ -54,3 +55,4 @@ spec:
             - name: vpro-db-data
 
               mountPath: /var/lib/mysql
+
