@@ -6,8 +6,7 @@ spec:
   selector:
     app: vprormq
   ports:
-  - name: http
-    port: 5672
+  - port: 5672
     targetPort: vprormq-port
     protocol: TCP
   type: ClusterIP
